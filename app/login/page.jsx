@@ -1,35 +1,34 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
-  const [state, setState] = useState('idle'); // idle | sending | sent | error
+  const [password, setPassword] = useState('');
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
   async function onSubmit(e) {
     e.preventDefault();
-    setState('sending');
+    setBusy(true);
+    setError('');
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-        shouldCreateUser: false, // only invited users can sign in
-      },
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      setError(error.message);
-      setState('error');
+      setError(error.message === 'Invalid login credentials' ? 'Email or password not recognised.' : error.message);
+      setBusy(false);
     } else {
-      setState('sent');
+      router.replace('/');
+      router.refresh();
     }
   }
 
   return (
     <div className="login">
       <h1>Sign in</h1>
-      <p className="sub">We'll email you a one-time sign-in link.</p>
+      <p className="sub">Goldhurst Property Group</p>
       <form onSubmit={onSubmit}>
         <input
           type="email"
@@ -37,14 +36,20 @@ export default function LoginPage() {
           placeholder="you@goldhurstpropertygroup.co.uk"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
+          autoComplete="username"
         />
-        <button type="submit" disabled={state === 'sending'}>
-          {state === 'sending' ? 'Sending…' : 'Email me a link'}
-        </button>
+        <input
+          type="password"
+          required
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
+          style={{ marginTop: 10 }}
+        />
+        <button type="submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
-      {state === 'sent' && <div className="notice">Check your inbox for the sign-in link. It expires in an hour.</div>}
-      {state === 'error' && <div className="notice">Couldn't send the link: {error}</div>}
+      {error && <div className="notice">{error}</div>}
     </div>
   );
 }
