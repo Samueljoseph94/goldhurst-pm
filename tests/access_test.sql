@@ -11,6 +11,8 @@ set local role app_user;
 set local request.jwt.claim.sub = '30000000-0000-0000-0000-000000000003';
 select 'visible properties' as check, string_agg(name, ', ') as result from properties;
 select 'visible tenancies', count(*)::text from tenancies;
+select 'arrears view rows (expect 0)', count(*)::text from tenancy_arrears;
+select 'key dates rows (expect 0)', count(*)::text from key_dates;
 \set ON_ERROR_STOP 0
 update properties set name = 'changed' where name = '8 Victoria Mews';
 select 'write blocked', case when exists (select 1 from properties where name = 'changed') then 'FAIL' else 'PASS' end;

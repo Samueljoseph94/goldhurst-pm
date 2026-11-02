@@ -2,9 +2,22 @@
 -- Staff see the companies they're members of; owner_viewer members (e.g. Hyjan) see only
 -- their own company and can't write. Runs on Supabase, where auth.uid() is the signed-in user.
 
+-- Supabase provides auth.uid(); only define a stand-in when running on plain Postgres (tests).
 create schema if not exists auth;
-create or replace function auth.uid() returns uuid language sql stable as
-$$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+do $$ begin
+  if not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                 where n.nspname = 'auth' and p.proname = 'uid') then
+    execute 'create function auth.uid() returns uuid language sql stable as '
+         || quote_literal('select nullif(current_setting(''request.jwt.claim.sub'', true), '''')::uuid');
+  end if;
+end $$;
+
+-- Views must apply the querying user's row-level security, not the owner's.
+alter view tenancy_arrears     set (security_invoker = true);
+alter view compliance_status_v set (security_invoker = true);
+alter view key_dates           set (security_invoker = true);
+alter view reserve_balances    set (security_invoker = true);
+alter view sc_unit_shares      set (security_invoker = true);
 
 create or replace function app_can_read(p_company uuid) returns boolean
 language sql stable security definer as $$
