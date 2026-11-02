@@ -1,0 +1,71 @@
+:root {
+  --green: #1e2b1c;
+  --green-2: #2c3d29;
+  --sage: #9aaf8f;
+  --sage-soft: #e8ede4;
+  --gold: #b89a4a;
+  --ink: #1b1f1a;
+  --muted: #6a7266;
+  --line: #dfe4db;
+  --bg: #f7f8f5;
+  --card: #ffffff;
+  --red: #a33a2c;
+  --amber: #a06a12;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #eef1ea; --muted: #a3ab9e; --line: #2f3a2c; --bg: #121711; --card: #1a2118;
+    --sage-soft: #233020;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.5;
+}
+a { color: inherit; }
+header.top {
+  background: var(--green); color: #f3f1ea; border-bottom: 3px solid var(--sage);
+}
+header.top .inner { max-width: 1120px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 16px; }
+header.top .brand { font-weight: 700; letter-spacing: 0.02em; text-decoration: none; }
+header.top .brand span { color: var(--sage); font-weight: 500; margin-left: 6px; }
+header.top nav { margin-left: auto; display: flex; gap: 14px; align-items: center; font-size: 14px; }
+header.top nav a { text-decoration: none; opacity: 0.9; }
+header.top button { background: none; border: 1px solid rgba(255,255,255,0.3); color: inherit; border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; }
+main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 28px 0 10px; }
+.sub { color: var(--muted); margin: 0 0 20px; }
+.crumbs { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.crumbs a { text-decoration: none; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 16px 0 8px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.stat .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.stat .value { font-size: 22px; font-weight: 650; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; background: var(--sage-soft); }
+tr:last-child td { border-bottom: none; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td a { text-decoration: none; font-weight: 550; }
+td a:hover { text-decoration: underline; }
+.pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--sage-soft); color: var(--green); }
+@media (prefers-color-scheme: dark) { .pill { color: var(--sage); } }
+.pill.expired { background: #f4dcd8; color: var(--red); }
+.pill.warn { background: #f6ead2; color: var(--amber); }
+.muted { color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+dl.kv { display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px; margin: 0; padding: 14px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+.login { max-width: 380px; margin: 12vh auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 28px; }
+.login input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: var(--bg); color: var(--ink); }
+.login button { width: 100%; margin-top: 12px; padding: 10px; border: 0; border-radius: 8px; background: var(--green); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+.notice { padding: 12px 14px; border-radius: 8px; background: var(--sage-soft); margin-top: 14px; font-size: 14px; }
+.empty { padding: 24px; text-align: center; color: var(--muted); }
+.search { padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; width: 100%; max-width: 320px; background: var(--card); color: var(--ink); margin-bottom: 12px; }
