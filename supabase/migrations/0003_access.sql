@@ -20,29 +20,29 @@ alter view reserve_balances    set (security_invoker = true);
 alter view sc_unit_shares      set (security_invoker = true);
 
 create or replace function app_can_read(p_company uuid) returns boolean
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select exists (select 1 from memberships m where m.user_id = auth.uid() and m.company_id = p_company)
 $$;
 
 create or replace function app_can_write(p_company uuid) returns boolean
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select exists (select 1 from memberships m where m.user_id = auth.uid()
                  and m.company_id = p_company and m.role in ('admin', 'manager'))
 $$;
 
 create or replace function company_of_property(p uuid) returns uuid
-language sql stable security definer as $$ select company_id from properties where id = p $$;
+language sql stable security definer set search_path = public as $$ select company_id from properties where id = p $$;
 
 create or replace function company_of_tenancy(t uuid) returns uuid
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select p.company_id from tenancies x join properties p on p.id = x.property_id where x.id = t $$;
 
 create or replace function company_of_sc_schedule(s uuid) returns uuid
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select p.company_id from sc_schedules x join properties p on p.id = x.property_id where x.id = s $$;
 
 create or replace function company_of_sc_year(y uuid) returns uuid
-language sql stable security definer as $$
+language sql stable security definer set search_path = public as $$
   select company_of_sc_schedule(schedule_id) from sc_years where id = y $$;
 
 do $$
@@ -88,3 +88,11 @@ end $$;
 
 alter table memberships enable row level security;
 create policy memberships_self on memberships for select using (user_id = auth.uid());
+
+-- reserve_movements isn't company-scoped directly; restrict via its fund
+alter table reserve_movements enable row level security;
+create policy reserve_movements_read on reserve_movements for select
+  using (app_can_read(company_of_property((select property_id from reserve_funds f where f.id = fund_id))));
+create policy reserve_movements_write on reserve_movements for all
+  using (app_can_write(company_of_property((select property_id from reserve_funds f where f.id = fund_id))))
+  with check (app_can_write(company_of_property((select property_id from reserve_funds f where f.id = fund_id))));
