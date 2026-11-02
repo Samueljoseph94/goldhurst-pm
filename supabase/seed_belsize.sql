@@ -1,0 +1,4 @@
+-- 21 Belsize Lane NW3 5AS, BGP Properties Ltd. Managed by Goldhurst PM from 16 Oct 2026.
+-- Leaseholders taken from the 20 Oct 2026 change-of-management letters. Surnames, lease terms,
+-- ground rent and service-charge shares to be completed from JAR's handover records.
+-- Loaded live via the Supabase SQL editor on 2 Nov 2026 (10 units, 10 long leases).
