@@ -43,7 +43,7 @@ export default function LoginPage() {
           {state === 'sending' ? 'Sending…' : 'Email me a link'}
         </button>
       </form>
-      {state === 'sent' && <div className="notice">Check your inbox for the sign-in link. Open it in this browser.</div>}
+      {state === 'sent' && <div className="notice">Check your inbox for the sign-in link. It expires in an hour.</div>}
       {state === 'error' && <div className="notice">Couldn't send the link: {error}</div>}
     </div>
   );

@@ -66,6 +66,8 @@ dl.kv dd { margin: 0; }
 .login { max-width: 380px; margin: 12vh auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 28px; }
 .login input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: var(--bg); color: var(--ink); }
 .login button { width: 100%; margin-top: 12px; padding: 10px; border: 0; border-radius: 8px; background: var(--green); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+@media (prefers-color-scheme: dark) { .login button { background: var(--sage); color: var(--green); } }
+.login button:disabled { opacity: 0.6; cursor: wait; }
 .notice { padding: 12px 14px; border-radius: 8px; background: var(--sage-soft); margin-top: 14px; font-size: 14px; }
 .empty { padding: 24px; text-align: center; color: var(--muted); }
 .search { padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; font: inherit; width: 100%; max-width: 320px; background: var(--card); color: var(--ink); margin-bottom: 12px; }
